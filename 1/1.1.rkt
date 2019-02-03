@@ -44,5 +44,32 @@
       (if (= x 0)
           0
           y))
-    (test 0 (p))
-    )
+    ;;; (test 0 (p))
+    ;; 1.6                    
+    (define (square x)
+      (* x x))
+
+    (define (good-enough? guess x)
+      (< (abs (- (square guess) x)) 0.001))
+
+    (define (average x y)
+      (/ (+ x y) 2))
+
+    (define (improve guess x)
+      (average guess (/ x guess)))
+    ;; При использовании самосписной процедуры для проверки условий, она не будет обработанна особым случаем
+    ;; как if, соотвественно если у нас апликативный порядок вычислений мы падаем в рекурсию так как начинают 
+    ;; вычисляться все аргументы.
+    ;;; (define (new-if predicate then-clause else-clause)
+    ;;;   (cond (predicate then-clause)
+    ;;;         (else else-clause)))
+
+    (define (sqrt-iter guess x)
+      (if (good-enough? guess x)
+          guess
+          (sqrt-iter (improve guess x)
+                    x)))
+    (define (sqrt x)
+      (sqrt-iter 1.0 x))
+    (sqrt 2)
+)
